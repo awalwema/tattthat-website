@@ -1,0 +1,53 @@
+---
+const useCases = [
+  {
+    icon: "💭",
+    title: "First Tattoo Nerves?",
+    description: "See exactly what it'll look like on YOUR body before you book. No more wondering, no more anxiety.",
+    color: "from-purple-500/20 to-transparent"
+  },
+  {
+    icon: "📍",
+    title: "Finding the Right Spot",
+    description: "Arm? Shoulder? Back? Try different placements until it feels perfect. Drag, resize, rotate.",
+    color: "from-blue-500/20 to-transparent"
+  },
+  {
+    icon: "🐕",
+    title: "Custom Design Dreams",
+    description: "Turn any photo into a tattoo design. Your pet, a sketch, a logo—we'll make it ink-ready.",
+    color: "from-green-500/20 to-transparent"
+  },
+  {
+    icon: "👨‍👩‍👧",
+    title: "Convince the Skeptics",
+    description: "Need to show your mom first? Share a realistic preview before the conversation happens.",
+    color: "from-orange-500/20 to-transparent"
+  }
+];
+---
+
+<section id="use-cases" class="py-24 px-4 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent">
+  <div class="max-w-6xl mx-auto">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        Perfect For...
+      </h2>
+      <p class="text-white/60 text-lg max-w-2xl mx-auto">
+        Whatever's holding you back, we've got you covered
+      </p>
+    </div>
+
+    <!-- Use Case Cards -->
+    <div class="grid md:grid-cols-2 gap-6">
+      {useCases.map((useCase) => (
+        <div class={`relative p-8 rounded-2xl bg-gradient-to-br ${useCase.color} border border-white/10 hover:border-white/20 transition-colors`}>
+          <div class="text-4xl mb-4">{useCase.icon}</div>
+          <h3 class="text-xl font-semibold mb-2">{useCase.title}</h3>
+          <p class="text-white/60">{useCase.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

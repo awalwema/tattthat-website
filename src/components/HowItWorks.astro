@@ -1,0 +1,60 @@
+---
+const steps = [
+  {
+    number: "1",
+    icon: "📸",
+    title: "Upload Your Photo",
+    description: "Take or choose a photo of where you want your tattoo"
+  },
+  {
+    number: "2",
+    icon: "🎨",
+    title: "Pick a Design",
+    description: "Choose from 40+ designs or convert your own image"
+  },
+  {
+    number: "3",
+    icon: "✨",
+    title: "See Your Tattoo",
+    description: "AI renders it photorealistically on your skin in seconds"
+  }
+];
+---
+
+<section id="how-it-works" class="py-24 px-4">
+  <div class="max-w-6xl mx-auto">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        How It Works
+      </h2>
+      <p class="text-white/60 text-lg max-w-2xl mx-auto">
+        Three simple steps to see your future tattoo
+      </p>
+    </div>
+
+    <!-- Steps -->
+    <div class="grid md:grid-cols-3 gap-8 md:gap-12">
+      {steps.map((step, index) => (
+        <div class="relative text-center">
+          {/* Connector line (hidden on mobile, hidden after last item) */}
+          {index < steps.length - 1 && (
+            <div class="hidden md:block absolute top-12 left-1/2 w-full h-px bg-gradient-to-r from-white/20 to-transparent"></div>
+          )}
+
+          {/* Icon */}
+          <div class="relative inline-flex items-center justify-center w-24 h-24 mb-6 rounded-2xl bg-white/5 border border-white/10">
+            <span class="text-4xl">{step.icon}</span>
+            <div class="absolute -top-2 -right-2 w-8 h-8 bg-brand-accent rounded-full flex items-center justify-center text-sm font-bold">
+              {step.number}
+            </div>
+          </div>
+
+          {/* Content */}
+          <h3 class="text-xl font-semibold mb-2">{step.title}</h3>
+          <p class="text-white/60">{step.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
