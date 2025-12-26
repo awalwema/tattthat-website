@@ -1,20 +1,22 @@
 ---
+import ImageLightbox from './ImageLightbox.tsx';
+
 const steps = [
   {
     number: "1",
-    icon: "📸",
+    icon: "/images/step-upload.png",
     title: "Upload Your Photo",
     description: "Take or choose a photo of where you want your tattoo"
   },
   {
     number: "2",
-    icon: "🎨",
+    icon: "/images/step-design.png",
     title: "Pick a Design",
-    description: "Choose from 40+ designs or convert your own image"
+    description: "Choose from 50+ designs or convert your own image"
   },
   {
     number: "3",
-    icon: "✨",
+    icon: "/images/step-result.png",
     title: "See Your Tattoo",
     description: "AI renders it photorealistically on your skin in seconds"
   }
@@ -43,11 +45,14 @@ const steps = [
           )}
 
           {/* Icon */}
-          <div class="relative inline-flex items-center justify-center w-24 h-24 mb-6 rounded-2xl bg-white/5 border border-white/10">
-            <span class="text-4xl">{step.icon}</span>
-            <div class="absolute -top-2 -right-2 w-8 h-8 bg-brand-accent rounded-full flex items-center justify-center text-sm font-bold">
-              {step.number}
-            </div>
+          <div class="mb-6">
+            <ImageLightbox
+              client:load
+              src={step.icon}
+              alt={step.title}
+              number={step.number}
+              className="w-48 h-48 md:w-56 md:h-56"
+            />
           </div>
 
           {/* Content */}

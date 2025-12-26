@@ -88,13 +88,17 @@ export default function BeforeAfterSlider({
         </div>
       </div>
 
-      {/* Labels */}
-      <div className="absolute bottom-4 left-4 px-3 py-1 bg-black/60 backdrop-blur-sm rounded-full text-sm font-medium">
-        {beforeLabel}
-      </div>
-      <div className="absolute bottom-4 right-4 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium text-black">
-        {afterLabel}
-      </div>
+      {/* Labels - show based on slider position to avoid overlap */}
+      {sliderPosition < 70 && (
+        <div className="absolute bottom-4 right-4 px-3 py-1 bg-black/60 backdrop-blur-sm rounded-full text-sm font-medium transition-opacity">
+          {beforeLabel}
+        </div>
+      )}
+      {sliderPosition > 30 && (
+        <div className="absolute bottom-4 left-4 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium text-black transition-opacity">
+          {afterLabel}
+        </div>
+      )}
     </div>
   );
 }
