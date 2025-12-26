@@ -16,6 +16,8 @@ export default function BeforeAfterSlider({
   const [sliderPosition, setSliderPosition] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const isHorizontalSwipeRef = useRef<boolean | null>(null);
 
   const handleMove = useCallback((clientX: number) => {
     if (!containerRef.current) return;
@@ -26,32 +28,59 @@ export default function BeforeAfterSlider({
     setSliderPosition(percentage);
   }, []);
 
-  const handleStart = (clientX: number) => {
-    setIsDragging(true);
-    handleMove(clientX);
+  const handleEnd = () => {
+    setIsDragging(false);
+    touchStartRef.current = null;
+    isHorizontalSwipeRef.current = null;
   };
 
-  const handleEnd = () => setIsDragging(false);
+  // Desktop: click/drag anywhere
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    handleMove(e.clientX);
+  };
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (isDragging) handleMove(e.clientX);
   };
 
+  // Mobile: tap to position, horizontal swipe to drag, vertical swipe scrolls page
   const handleTouchStart = (e: React.TouchEvent) => {
-    e.preventDefault();
-    handleStart(e.touches[0].clientX);
+    const touch = e.touches[0];
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+    isHorizontalSwipeRef.current = null;
+    // Tap to position immediately
+    handleMove(touch.clientX);
+    setIsDragging(true);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    e.preventDefault();
-    if (isDragging) handleMove(e.touches[0].clientX);
+    if (!touchStartRef.current) return;
+
+    const touch = e.touches[0];
+    const deltaX = Math.abs(touch.clientX - touchStartRef.current.x);
+    const deltaY = Math.abs(touch.clientY - touchStartRef.current.y);
+
+    // Determine swipe direction on first significant movement
+    if (isHorizontalSwipeRef.current === null && (deltaX > 10 || deltaY > 10)) {
+      isHorizontalSwipeRef.current = deltaX > deltaY;
+    }
+
+    // Only control slider if horizontal swipe, otherwise let page scroll
+    if (isHorizontalSwipeRef.current) {
+      e.preventDefault();
+      handleMove(touch.clientX);
+    } else {
+      // Vertical scroll - stop controlling slider
+      setIsDragging(false);
+    }
   };
 
   return (
     <div
       ref={containerRef}
-      className="relative w-full max-w-lg aspect-square rounded-3xl overflow-hidden cursor-ew-resize select-none shadow-2xl shadow-black/50 touch-none"
-      onMouseDown={(e) => handleStart(e.clientX)}
+      className="relative w-full max-w-lg aspect-square rounded-3xl overflow-hidden cursor-ew-resize select-none shadow-2xl shadow-black/50"
+      onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleEnd}
       onMouseLeave={handleEnd}
