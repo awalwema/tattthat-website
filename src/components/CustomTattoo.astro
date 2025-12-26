@@ -1,0 +1,94 @@
+---
+import ImageLightbox from './ImageLightbox.tsx';
+// Custom tattoo conversion section
+---
+
+<section id="custom" class="py-24 px-4">
+  <div class="max-w-6xl mx-auto">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        Turn Any Image Into Ink
+      </h2>
+      <p class="text-white/60 text-lg max-w-2xl mx-auto">
+        Your pet. Your sketch. Your memory. Made tattoo-ready.
+      </p>
+    </div>
+
+    <!-- Transformation Flow -->
+    <div class="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-4">
+      <!-- Step 1: Original Photo -->
+      <div class="flex flex-col items-center">
+        <ImageLightbox
+          client:load
+          src="/images/custom-original.jpg"
+          alt="Original photo"
+          className="w-48 h-48 md:w-56 md:h-56"
+        />
+        <p class="mt-4 text-sm text-white/60">Your photo</p>
+      </div>
+
+      <!-- Arrow 1 -->
+      <div class="hidden md:flex items-center text-white/30">
+        <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </div>
+      <div class="md:hidden text-white/30">
+        <svg class="w-8 h-8 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </div>
+
+      <!-- Step 2: Converted Design -->
+      <div class="flex flex-col items-center">
+        <ImageLightbox
+          client:load
+          src="/images/custom-design.jpg"
+          alt="Converted tattoo design"
+          className="w-48 h-48 md:w-56 md:h-56"
+        />
+        <p class="mt-4 text-sm text-white/60">Tattoo design</p>
+      </div>
+
+      <!-- Arrow 2 -->
+      <div class="hidden md:flex items-center text-white/30">
+        <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </div>
+      <div class="md:hidden text-white/30">
+        <svg class="w-8 h-8 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </div>
+
+      <!-- Step 3: On Skin -->
+      <div class="flex flex-col items-center">
+        <ImageLightbox
+          client:load
+          src="/images/custom-result.jpg"
+          alt="Tattoo preview on skin"
+          className="w-48 h-48 md:w-56 md:h-56"
+        />
+        <p class="mt-4 text-sm text-white/60">On your skin</p>
+      </div>
+    </div>
+
+    <!-- Feature highlights -->
+    <div class="mt-16 grid md:grid-cols-3 gap-8 text-center">
+      <div>
+        <h3 class="font-semibold mb-2">Pet Portraits</h3>
+        <p class="text-white/60 text-sm">Turn your furry friend into forever ink</p>
+      </div>
+      <div>
+        <h3 class="font-semibold mb-2">Hand-drawn Sketches</h3>
+        <p class="text-white/60 text-sm">See your own artwork as a real tattoo</p>
+      </div>
+      <div>
+        <h3 class="font-semibold mb-2">Meaningful Memories</h3>
+        <p class="text-white/60 text-sm">Photos, logos, symbols—made ink-ready</p>
+      </div>
+    </div>
+  </div>
+</section>
