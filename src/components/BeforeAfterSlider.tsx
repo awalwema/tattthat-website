@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 
 interface BeforeAfterSliderProps {
   beforeImage: string;
@@ -44,49 +44,67 @@ export default function BeforeAfterSlider({
     if (isDragging) handleMove(e.clientX);
   };
 
-  // Mobile: tap to position, horizontal swipe to drag, vertical swipe scrolls page
-  const handleTouchStart = (e: React.TouchEvent) => {
-    const touch = e.touches[0];
-    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
-    isHorizontalSwipeRef.current = null;
-    // Tap to position immediately
-    handleMove(touch.clientX);
-    setIsDragging(true);
-  };
+  // Use native event listeners for Safari compatibility (passive: false)
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!touchStartRef.current) return;
-
-    const touch = e.touches[0];
-    const deltaX = Math.abs(touch.clientX - touchStartRef.current.x);
-    const deltaY = Math.abs(touch.clientY - touchStartRef.current.y);
-
-    // Determine swipe direction on first significant movement
-    if (isHorizontalSwipeRef.current === null && (deltaX > 10 || deltaY > 10)) {
-      isHorizontalSwipeRef.current = deltaX > deltaY;
-    }
-
-    // Only control slider if horizontal swipe, otherwise let page scroll
-    if (isHorizontalSwipeRef.current) {
-      e.preventDefault();
+    const onTouchStart = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+      isHorizontalSwipeRef.current = null;
       handleMove(touch.clientX);
-    } else {
-      // Vertical scroll - stop controlling slider
+      setIsDragging(true);
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (!touchStartRef.current) return;
+
+      const touch = e.touches[0];
+      const deltaX = Math.abs(touch.clientX - touchStartRef.current.x);
+      const deltaY = Math.abs(touch.clientY - touchStartRef.current.y);
+
+      // Determine swipe direction on first significant movement
+      if (isHorizontalSwipeRef.current === null && (deltaX > 10 || deltaY > 10)) {
+        isHorizontalSwipeRef.current = deltaX > deltaY;
+      }
+
+      // Only control slider if horizontal swipe
+      if (isHorizontalSwipeRef.current) {
+        e.preventDefault(); // This works with passive: false
+        handleMove(touch.clientX);
+      } else {
+        setIsDragging(false);
+      }
+    };
+
+    const onTouchEnd = () => {
       setIsDragging(false);
-    }
-  };
+      touchStartRef.current = null;
+      isHorizontalSwipeRef.current = null;
+    };
+
+    // Add listeners with passive: false so preventDefault works in Safari
+    container.addEventListener('touchstart', onTouchStart, { passive: true });
+    container.addEventListener('touchmove', onTouchMove, { passive: false });
+    container.addEventListener('touchend', onTouchEnd, { passive: true });
+
+    return () => {
+      container.removeEventListener('touchstart', onTouchStart);
+      container.removeEventListener('touchmove', onTouchMove);
+      container.removeEventListener('touchend', onTouchEnd);
+    };
+  }, [handleMove]);
 
   return (
     <div
       ref={containerRef}
       className="relative w-full max-w-lg aspect-square rounded-3xl overflow-hidden cursor-ew-resize select-none shadow-2xl shadow-black/50"
+      style={{ touchAction: 'pan-y' }}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleEnd}
       onMouseLeave={handleEnd}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleEnd}
     >
       {/* Before Image (Full) */}
       <img
