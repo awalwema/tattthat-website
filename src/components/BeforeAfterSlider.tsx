@@ -26,25 +26,38 @@ export default function BeforeAfterSlider({
     setSliderPosition(percentage);
   }, []);
 
-  const handleMouseDown = () => setIsDragging(true);
-  const handleMouseUp = () => setIsDragging(false);
+  const handleStart = (clientX: number) => {
+    setIsDragging(true);
+    handleMove(clientX);
+  };
+
+  const handleEnd = () => setIsDragging(false);
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (isDragging) handleMove(e.clientX);
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault();
+    handleStart(e.touches[0].clientX);
+  };
+
   const handleTouchMove = (e: React.TouchEvent) => {
-    handleMove(e.touches[0].clientX);
+    e.preventDefault();
+    if (isDragging) handleMove(e.touches[0].clientX);
   };
 
   return (
     <div
       ref={containerRef}
-      className="relative w-full max-w-lg aspect-square rounded-3xl overflow-hidden cursor-ew-resize select-none shadow-2xl shadow-black/50"
+      className="relative w-full max-w-lg aspect-square rounded-3xl overflow-hidden cursor-ew-resize select-none shadow-2xl shadow-black/50 touch-none"
+      onMouseDown={(e) => handleStart(e.clientX)}
       onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
+      onMouseUp={handleEnd}
+      onMouseLeave={handleEnd}
+      onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
+      onTouchEnd={handleEnd}
     >
       {/* Before Image (Full) */}
       <img
@@ -70,10 +83,8 @@ export default function BeforeAfterSlider({
 
       {/* Slider Handle */}
       <div
-        className="absolute top-0 bottom-0 w-1 bg-white shadow-lg cursor-ew-resize"
+        className="absolute top-0 bottom-0 w-1 bg-white shadow-lg cursor-ew-resize pointer-events-none"
         style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
-        onMouseDown={handleMouseDown}
-        onTouchStart={handleMouseDown}
       >
         {/* Handle Circle */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center">
